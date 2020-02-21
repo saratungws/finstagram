@@ -1,0 +1,22 @@
+
+
+<head>
+  <link rel="stylesheet" href="../../../stylesheets/normalize.css">
+  <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed|Josefin+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../stylesheets/lib.css">
+  <link rel="stylesheet" href="../../../stylesheets/app.css">
+  <title>Finstagram</title>
+</head>
+
+<% if current_user %>
+  <div class="new-finstagram-post">
+    <a href="/finstagram_posts/new" class="button">New Post</a>
+  </div>
+<% end %>
+
+<% @finstagram_posts.each do |finstagram_post| %>
+    <%= erb :'shared/finstagram_post', locals: { finstagram_post: finstagram_post } %>
+<% end %>
+
+
+

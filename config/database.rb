@@ -1,14 +1,44 @@
 configure do
   # Log queries to STDOUT in development
-  if Sinatra::Application.development?
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
+# A sample Gemfile
+source "https://rubygems.org"
+
+gem 'rake'
+gem 'activesupport'
+
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'sinatra-activerecord'
+
+gem 'puma'
+gem 'tux'
+gem 'pry'
+
+group :development, :test do
+  gem 'shotgun'
+  gem 'sqlite3'
+end
+
+group :production do 
+  gem 'rails_12factor'
+  gem 'pg'
+end
+if Sinatra::Application.development?
+    set :database, {
+      adapter: "sqlite3",
+      database: "db/db.sqlite3"
+    }
+  else
+    db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/mydb')
+    set :database, {
+      adapter: "postgresql",
+      host: db.host,
+      username: db.user,
+      password: db.password,
+      database: db.path[1..-1],
+      encoding: 'utf8'
+    }
   end
-
-  set :database, {
-    adapter: "sqlite3",
-    database: "db/db.sqlite3"
-  }
-
   # Load all models from app/models, using autoload instead of require
   # See http://www.rubyinside.com/ruby-techniques-revealed-autoload-1652.html
   Dir[APP_ROOT.join('app', 'models', '*.rb')].each do |model_file|
